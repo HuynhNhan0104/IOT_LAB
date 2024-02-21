@@ -4,7 +4,7 @@ import json
 import random
 
 ADAFRUIT_IO_USERNAME = "NhanHuynh"
-ADAFRUIT_IO_KEY = "aio_oaXQ14CIwbosTjcgBbME33MLzO1A"
+ADAFRUIT_IO_KEY = ""
 BROKER_ADDRESS = "io.adafruit.com"
 PORT = 1883
 
