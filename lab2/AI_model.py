@@ -17,7 +17,7 @@ class Camera:
         #return bool, img
         return self.last_frame
 
-    def __get_camera(self,source):
+    def get_camera(self,source):
         return cv2.VideoCapture(source)
     
     def release_camera(self):

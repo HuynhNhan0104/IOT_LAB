@@ -28,7 +28,7 @@ class MQTT_Module:
     def subscribe(self, client, userdata, mid, granted_qos):
         print("subscribed successfully")
 
-    def disconnected(self, client):
+    def disconnected(self, client, userdata, rc):
         print("Disconnected...")
         sys.exit (1)
 
@@ -62,7 +62,7 @@ class MQTT_Module:
         self.client.subscribe(feed_name)
         
     def publish(self,feed_name,message):
-        self.client.publish(feed_name,message,1)
+        return self.client.publish(feed_name,message,1)
          
     def set_username(self,username):
         self.username= username
