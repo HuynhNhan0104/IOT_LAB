@@ -67,23 +67,6 @@ def main():
     
 if __name__ == "__main__":
     main()
-    # cam = cv2.VideoCapture(URL)
-    # count = 0
-    # while True:
-    #     time_current = time.time()
-    #     if count > 5:
-    #         count = 0
-    #         # Lấy số lượng frame trong stream
-    #         # Đặt vị trí frame hiện tại thành giá trị cuối cùng
-    #         # cam.set(cv2.CAP_PROP_POS_FRAMES, frame_count - 1)
-    #         ret, image = cam.read()
-    #         cv2.imshow("my cam",image)
-    #     else: 
-    #         count+=1
-    #     keyboard_input = cv2.waitKey(1)
-    #     # 27 is the ASCII for the esc key on your keyboard.
-    #     if keyboard_input == 27:
-    #         break
-    #     time.sleep(1)
+
 
 
