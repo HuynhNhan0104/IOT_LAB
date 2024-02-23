@@ -1,59 +1,89 @@
 from keras.models import load_model  # TensorFlow is required for Keras to work
 import cv2  # Install opencv-python
 import numpy as np
+import time
+import threading
+#import my module
 from AI_model import AI_model
-import requests
-import imutils 
+from mqtt import MQTT_Module
+from uart import Serial_module
 
-# Disable scientific notation for clarity
-np.set_printoptions(suppress=True)
-my_ai = AI_model("model/keras_model.h5","model/labels.txt")
-# CAMERA can be 0 or 1 based on default camera of your computer
+AIO_FEED_ID  = [
+    "NhanHuynh/feeds/led", 	
+    "NhanHuynh/feeds/temperature" ,
+    "NhanHuynh/feeds/mask"
+]
+AIO_USERNAME    = "NhanHuynh"
+AIO_KEY         = "aio_cjdw41TQxexd6tdbOQ2mW7bYdc3r"
+BROKER_ADDRESS  = "io.adafruit.com"
+PORT            = 1883
 
-
-url_using_cv2 = "http://192.168.137.4:8080/video"
-
-url_using_imutils= "http://192.168.137.4:8080/shot.jpg"
-
-
-def get_image_from_camera_of_PC(camera):
-    return camera.read()
-
-def get_camera(source):
-    return cv2.VideoCapture(source)
-
-
-# runing faster
-def get_image_from_android_using_ip_webcam(url):
-    #using android camera through app ip webcam
-    image_resp = requests.get(url) 
-    image_arr = np.array(bytearray(image_resp.content), dtype=np.uint8) 
-    image = cv2.imdecode(image_arr, -1)
-    image = imutils.resize(image, width=640, height=480) 
-    # image = cv2.resize(image,(600,480),interpolation=cv2.INTER_AREA)
-    return True, image
+# URL             = "http://192.168.9.67:8080/video"
+# URL             = "http://192.168.137.4:8080/video"
 
 
 
+result_in_Vietnamese = {
+    "mask"      : "Deo khau trang",
+    "noneMask"  : "Ko deo khau trang",
+    "noneHuman" : "Ko co nguoi"
+}
 
-
-camera = get_camera(url_using_cv2)
-while True:
-    # Grab the webcamera's image.
-    ret, image = get_image_from_android_using_ip_webcam(url_using_imutils)
+def processData_external(data,mqtt_handler):
+    data = data.replace("!", "")
+    data = data.replace("#", "")
+    splitData = data.split(":")
+    print(splitData)
+    mqtt_handler.publish("NhanHuynh/feeds/temp",splitData[1])
     
-    cv2.imshow("my camera",image)
-    my_ai.predict(image)
-    
-    
-    # Listen to the keyboard for presses.
-    keyboard_input = cv2.waitKey(1)
 
-    # 27 is the ASCII for the esc key on your keyboard.
-    if keyboard_input == 27:
-        break
+def main():
+    # Disable scientific notation for clarity
+    np.set_printoptions(suppress=True)
+    my_serial = Serial_module("COM3",115200)
+    my_serial.set_processData(processData_external)
+    #     my_serial.set_processData(processData_external)
+    my_ai = AI_model("model/keras_model.h5","model/labels.txt",0)
+    mqtt_handler = MQTT_Module(AIO_USERNAME, AIO_KEY, AIO_FEED_ID, BROKER_ADDRESS, PORT)
+    #create a counter
+    count_ai = 0
+    while True:
+        my_serial.readSerial(mqtt_handler)
+        if count_ai > 5:
+            count_ai = 0
+            result, _ = my_ai.image_detector()
+            # mqtt_handler.publish("NhanHuynh/feeds/mask",result_in_Vietnamese[result])
+        else: 
+            count_ai += 1
+        # Listen to the keyboard for presses.
+        keyboard_input = cv2.waitKey(1)
+        # 27 is the ASCII for the esc key on your keyboard.
+        if keyboard_input == 27:
+            break
+        # time.sleep(1)
 
-camera.release()
-cv2.destroyAllWindows()
+    my_ai.camera.release_camera()
+    cv2.destroyAllWindows()
+    
+if __name__ == "__main__":
+    main()
+    # cam = cv2.VideoCapture(URL)
+    # count = 0
+    # while True:
+    #     time_current = time.time()
+    #     if count > 5:
+    #         count = 0
+    #         # Lấy số lượng frame trong stream
+    #         # Đặt vị trí frame hiện tại thành giá trị cuối cùng
+    #         # cam.set(cv2.CAP_PROP_POS_FRAMES, frame_count - 1)
+    #         ret, image = cam.read()
+    #         cv2.imshow("my cam",image)
+    #     else: 
+    #         count+=1
+    #     keyboard_input = cv2.waitKey(1)
+    #     # 27 is the ASCII for the esc key on your keyboard.
+    #     if keyboard_input == 27:
+    #         break
+    #     time.sleep(1)
 
 

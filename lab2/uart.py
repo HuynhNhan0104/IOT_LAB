@@ -32,13 +32,13 @@ class Serial_module:
     def set_processData(self,func):
         self.processData = func
         
-    def call_processData(self,arg):
+    def call_processData(self,*arg):
         if(self.processData is not None):
-            self.processData(arg)
+            self.processData(*arg)
         else: 
             print("processData hasnot been setted yet")
         
-    def readSerial(self):
+    def readSerial(self,mqtt_handler):
         bytesToRead = self.serial_handler.inWaiting()
         if (bytesToRead > 0):
             
@@ -47,7 +47,7 @@ class Serial_module:
                 start = self.mess.find("!")
                 end = self.mess.find("#")
                 print(self.mess[start:end + 1])
-                self.call_processData(self.mess[start:end + 1])
+                self.call_processData(self.mess[start:end + 1],mqtt_handler)
                 if (end == len(self.mess)):
                     self.mess = ""
                 else:
@@ -55,22 +55,22 @@ class Serial_module:
 
 
 
-def processData_external(data):
-    data = data.replace("!", "")
-    data = data.replace("#", "")
-    splitData = data.split(":")
-    print(splitData)
+# def processData_external(data,mqtt_handler):
+#     data = data.replace("!", "")
+#     data = data.replace("#", "")
+#     splitData = data.split(":")
+#     print(splitData)
     
-def main():
-    my_serial = Serial_module("COM3",115200)
-    my_serial.set_processData(processData_external)
-    while True:
-        try:
-            my_serial.readSerial()
-            time.sleep(1)
-        except KeyboardInterrupt:
-            break
+# def main():
+#     my_serial = Serial_module("COM3",115200)
+#     my_serial.set_processData(processData_external)
+#     while True:
+#         try:
+#             my_serial.readSerial()
+#             time.sleep(1)
+#         except KeyboardInterrupt:
+#             break
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
