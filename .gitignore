@@ -1,1 +1,6 @@
 lab2/__pycache__/AI_model.cpython-311.pyc
+lab2/GG_teachable_machine.py
+lab2/__pycache__/mqtt.cpython-311.pyc
+lab2/__pycache__/uart.cpython-311.pyc
+.gitignore
+

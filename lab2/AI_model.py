@@ -17,7 +17,7 @@ class Camera:
         #return bool, img
         return self.last_frame
 
-    def get_camera(self,source):
+    def __get_camera(self,source):
         return cv2.VideoCapture(source)
     
     def release_camera(self):
@@ -69,3 +69,23 @@ class AI_model:
         image = self.camera.get_last_image()
         cv2.imshow("my camera",image)
         return self.predict(image)
+    
+    
+    
+    
+    
+# test in here
+    
+def main():
+    my_ai = AI_model("model/keras_model.h5","model/labels.txt",0)
+    while True:
+        result, _ = my_ai.image_detector()
+        keyboard_input = cv2.waitKey(1)
+        # 27 is the ASCII for the esc key on your keyboard.
+        if keyboard_input == 27:
+            break
+    my_ai.camera.release_camera()
+    cv2.destroyAllWindows()
+
+if __name__ == "__main__":
+    main()
