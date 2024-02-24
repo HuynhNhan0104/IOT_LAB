@@ -54,23 +54,23 @@ class Serial_module:
                     self.mess = self.mess[end + 1:]
 
 
-#test in here
-# def processData_external(data,mqtt_handler):
-#     data = data.replace("!", "")
-#     data = data.replace("#", "")
-#     splitData = data.split(":")
-#     print(splitData)
+# test in here
+def processData_external(data,mqtt_handler):
+    data = data.replace("!", "")
+    data = data.replace("#", "")
+    splitData = data.split(":")
+    print(splitData)
     
-# def main():
-#     my_serial = Serial_module("COM3",115200)
-#     my_serial.set_processData(processData_external)
-#     while True:
-#         try:
-#             my_serial.readSerial()
-#             time.sleep(1)
-#         except KeyboardInterrupt:
-#             break
+def main():
+    my_serial = Serial_module("COM3",115200)
+    my_serial.set_processData(processData_external)
+    while True:
+        try:
+            my_serial.readSerial()
+            time.sleep(1)
+        except KeyboardInterrupt:
+            break
 
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
