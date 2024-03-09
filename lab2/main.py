@@ -15,7 +15,7 @@ AIO_FEED_ID  = [
     "NhanHuynh/feeds/humi"
 ]
 AIO_USERNAME    = "NhanHuynh"
-AIO_KEY         = "aio_wUIC47WzOJUlrAQhmRm7dtGOljKR"
+AIO_KEY         = ""
 BROKER_ADDRESS  = "io.adafruit.com"
 PORT            = 1883
 URL             = "http://192.168.137.191:8080/video"

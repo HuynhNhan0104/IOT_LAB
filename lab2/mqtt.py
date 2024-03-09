@@ -83,7 +83,7 @@ class MQTT_Module:
 
 AIO_FEED_IDs  = ["NhanHuynh/feeds/led", 	"NhanHuynh/feeds/temperature"]
 AIO_USERNAME = "NhanHuynh"
-AIO_KEY= "aio_cjdw41TQxexd6tdbOQ2mW7bYdc3r"
+AIO_KEY= ""
 BROKER_ADDRESS = "io.adafruit.com"
 PORT = 1883
 def main():
